@@ -5,25 +5,28 @@ import inspect
 
 
 class DynamicScope(abc.Mapping):
+    #init function basically constructor for class
     def __init__(self):
         self.env: Dict[str, Optional[Any]] = {}
-
+    #get item function returns value from dictionary and catches error and has a try and
+    #catch block to stop errors 
     def __getitem__(self, key: str) -> str:
         try:
             return self.env[key]
         except KeyError:
             raise NameError(f"{key} not found in DynamicScope")
 
-
+    #function to set item in the dictionary 
     def __setitem__(self, key: str, value: str):
         self.env[key] = value
-
+    #function to enable Iteration
     def __iter__(self) ->Iterator:
         return iter(self.env)
-
+    #function to get length
     def __len__(self):
         return len(self.env)
-
+#function to get dynamic variables inspecting the stack and frames to get variables 
+#and gather free variables with the list(frame.f_code.co_freevars) line then iterate through for final answer
 def get_dynamic_re() -> DynamicScope:
     dynamicscope = DynamicScope()
     stack_info = inspect.stack()
